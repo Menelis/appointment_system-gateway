@@ -1,0 +1,52 @@
+spring:
+  application:
+    name: appointment-gateway
+  cloud:
+    config:
+      enabled: false
+    gateway:
+      server:
+        webflux:
+          routes:
+            - id: auth_service
+              predicates:
+                - Path= /api/v1/account/**
+              uri: http://localhost:9001
+app:
+  open-api:
+    info:
+      title: Appointment API Gateway Service
+      description: Appointment API Gateway Service
+      version: 1.0.0
+  cors:
+    allowed-origins:
+      - http://localhost:9001
+    allowed-methods:
+      - POST
+      - GET
+      - PUT
+      - OPTIONS
+      - DELETE
+      - PATCH
+    allowed-headers:
+      - "*"
+    max-age: 3600
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+    operations-sorter: method
+    doc-expansion: none
+    urls:
+      - name: gateway-service
+        url: ${springdoc.api-docs.path}
+      - name: auth-service
+        url: http://localhost:9001/auth/v3/api-docs
+
+server:
+  port: 9000
+logging:
+  level:
+    root: info
+
