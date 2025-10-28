@@ -31,6 +31,8 @@ app:
     allowed-headers:
       - "*"
     max-age: 3600
+  jwt:
+    secret: "8adLFE4RHIqYOXhB7ZLjgqdRJWAioTMzlblC8XyKrc8="
 springdoc:
   api-docs:
     path: /v3/api-docs

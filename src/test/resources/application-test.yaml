@@ -4,3 +4,37 @@ spring:
   cloud:
     config:
       enabled: false
+app:
+  open-api:
+    info:
+      title: Appointment API Gateway Service - TEST
+      description: Appointment API Gateway Service
+      version: 1.0.0
+  cors:
+    allowed-origins:
+      - http://localhost:9001
+    allowed-methods:
+      - POST
+      - GET
+      - PUT
+      - OPTIONS
+      - DELETE
+      - PATCH
+    allowed-headers:
+      - "*"
+    max-age: 3600
+    jwt:
+      secret: "8adLFE4RHIqYOXhB7ZLjgqdRJWAioTMzlblC8XyKrc8="
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+    operations-sorter: method
+    doc-expansion: none
+    urls:
+      - name: gateway-service
+        url: ${springdoc.api-docs.path}
+      - name: auth-service
+        url: http://localhost:9001/auth/v3/api-docs
+
