@@ -12,4 +12,8 @@ public class AppConfigProperties {
     private OpenApiSettings openApi;
     private CorsSettings cors;
     private JwtSettings jwt;
+
+    private String[] whiteList;
+    private String[] adminRoutes;
+    private String[] userRoutes;
 }
