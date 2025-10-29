@@ -23,8 +23,14 @@ app:
     allowed-headers:
       - "*"
     max-age: 3600
-    jwt:
-      secret: "8adLFE4RHIqYOXhB7ZLjgqdRJWAioTMzlblC8XyKrc8="
+  jwt:
+    secret: "testSecret124582"
+  white-list:
+    - "*"
+  admin-routes:
+    - "/v1/admin/**"
+  user-routes:
+    - "/v1/admin/**"
 springdoc:
   api-docs:
     path: /v3/api-docs

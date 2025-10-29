@@ -33,6 +33,14 @@ app:
     max-age: 3600
   jwt:
     secret: "8adLFE4RHIqYOXhB7ZLjgqdRJWAioTMzlblC8XyKrc8="
+  white-list:
+    - "/v3/api-docs/**"
+    - "/swagger-ui.html/**"
+    - "/api/v1/account/**"
+  admin-routes:
+    - "/v1/admin/**"
+  user-routes:
+    - "/v1/admin/**"
 springdoc:
   api-docs:
     path: /v3/api-docs
