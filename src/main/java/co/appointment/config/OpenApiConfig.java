@@ -11,6 +11,7 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class OpenApiConfig {
+
     @Bean
     public OpenAPI customOpenAPI(final AppConfigProperties appConfigProperties) {
         OpenApiSettings.OpenApiInfo info = appConfigProperties.getOpenApi().getInfo();
