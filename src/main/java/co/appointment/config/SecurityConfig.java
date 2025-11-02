@@ -26,8 +26,6 @@ public class SecurityConfig {
                 .csrf(ServerHttpSecurity.CsrfSpec::disable)
                 .authorizeExchange(exchanges -> exchanges
                         .pathMatchers(appConfigProperties.getWhiteList()).permitAll()
-                        .pathMatchers(appConfigProperties.getAdminRoutes()).hasAnyRole(RoleConstants.ADMIN_ROLE)
-                        .pathMatchers(appConfigProperties.getUserRoutes()).hasAnyRole(RoleConstants.USER_ROLE)
                         .anyExchange().authenticated()
                 )
                 .securityContextRepository(NoOpServerSecurityContextRepository.getInstance())
