@@ -1,8 +1,10 @@
 package co.appointment.config;
 
+import co.appointment.service.CustomAccessDeniedHandler;
+import co.appointment.service.CustomAuthEntryPoint;
 import co.appointment.service.JwtReactiveAuthenticationManager;
 import co.appointment.service.JwtServerAuthenticationConverter;
-import co.appointment.shared.constant.RoleConstants;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -21,17 +23,18 @@ public class SecurityConfig {
     @Bean
     public SecurityWebFilterChain securityWebFilterChain(final ServerHttpSecurity http,
                                                          final AuthenticationWebFilter jwtAuthenticationWebFilter,
-                                                         final AppConfigProperties appConfigProperties) {
+                                                         final AppConfigProperties appConfigProperties,
+                                                         final ObjectMapper objectMapper) {
         return http
                 .csrf(ServerHttpSecurity.CsrfSpec::disable)
+                .exceptionHandling(exception -> exception.accessDeniedHandler(new CustomAccessDeniedHandler(objectMapper))
+                        .authenticationEntryPoint(new CustomAuthEntryPoint(objectMapper)))
                 .authorizeExchange(exchanges -> exchanges
                         .pathMatchers(appConfigProperties.getWhiteList()).permitAll()
                         .anyExchange().authenticated()
                 )
                 .securityContextRepository(NoOpServerSecurityContextRepository.getInstance())
                 .addFilterAt(jwtAuthenticationWebFilter, SecurityWebFiltersOrder.AUTHENTICATION)
-                //.httpBasic(ServerHttpSecurity.HttpBasicSpec::disable)
-                //.formLogin(ServerHttpSecurity.FormLoginSpec::disable)
                 .build();
     }
     @Bean
