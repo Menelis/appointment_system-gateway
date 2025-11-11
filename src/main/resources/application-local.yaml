@@ -8,10 +8,58 @@ spring:
       server:
         webflux:
           routes:
-            - id: auth_service
+            - id: book-service
+              uri: http://localhost:9008
               predicates:
-                - Path= /api/v1/account/**
-              uri: http://localhost:9001
+                - Path=/book/**
+          default-filters:
+            - TokenRelay # Token relay filter appends the oauth (or jwt) token to request header before forwarding requests
+  security:
+    oauth2:
+      client:
+        provider:
+          platform-auth-server:
+            issuer-uri: http://127.0.0.1:9000
+        registration:
+          gateway-client:
+            provider: platform-auth-server
+            client-id: gateway-client
+            client-secret: 8adLFE4RHIqYOXhB7ZLjgqdRJWAioTMzlblC8XyKrc8=
+            client-authentication-method: client_secret_basic
+            authorization-grant-type: authorization_code
+            redirect-uri: http://localhost:9001/login/oauth2/code/gateway-client
+            scope:
+              - openid
+              - profile
+              - email
+#    gateway:
+#      server:
+#        webflux:
+#          routes:
+#            - id: book-service
+#              uri: http://localhost:9008
+#              predicates:
+#                - Path=/book/**
+#              filters:
+#                - TokenRelay
+#            - id: auth_service
+#              predicates:
+#                - Path= /api/v1/account/**
+#              uri: http://localhost:9001
+#              filters:
+#                - TokenRelay # Token relay filter appends the oauth (or jwt) token to request header before forwarding requests
+#            - id: branch_service
+#              predicates:
+#                - Path= /api/v1/branch/**
+#              uri: http://localhost:9002
+#            - id: appointment_service
+#              predicates:
+#                - Path= /api/v1/appointment/**
+#              uri: http://localhost:9003
+#              filters:
+#                - TokenRelay # Token relay filter appends the oauth (or jwt) token to request header before forwarding requests
+
+
 app:
   open-api:
     info:
@@ -35,12 +83,16 @@ app:
     secret: "8adLFE4RHIqYOXhB7ZLjgqdRJWAioTMzlblC8XyKrc8="
   white-list:
     - "/v3/api-docs/**"
-    - "/swagger-ui.html/**"
+    - "/swagger-ui/**"
+    - "/auth-service/swagger-ui/**"
+    - "/auth-service/v3/api-docs/**"
     - "/api/v1/account/**"
+    - "/branch-service/swagger-ui/**"
+    - "/branch-service/v3/api-docs/**"
+    - "/appointment-service/swagger-ui/**"
+    - "/appointment-service/v3/api-docs/**"
   admin-routes:
-    - "/v1/admin/**"
-  user-routes:
-    - "/v1/admin/**"
+    - "/api/v1/branch/admin/**"
 springdoc:
   api-docs:
     path: /v3/api-docs
@@ -52,11 +104,15 @@ springdoc:
       - name: gateway-service
         url: ${springdoc.api-docs.path}
       - name: auth-service
-        url: http://localhost:9001/auth/v3/api-docs
+        url: http://localhost:9001/auth-service/v3/api-docs
+      - name: branch-service
+        url: http://localhost:9002/branch-service/v3/api-docs
+      - name: appointment-service
+        url: http://localhost:9003/appointment-service/v3/api-docs
 
 server:
-  port: 9000
+  port: 9001
 logging:
   level:
-    root: info
+    root: debug
 
