@@ -1,5 +1,6 @@
 package co.appointment.config;
 
+
 import co.appointment.shared.model.OpenApiSettings;
 import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;
@@ -11,7 +12,6 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class OpenApiConfig {
-
     @Bean
     public OpenAPI customOpenAPI(final AppConfigProperties appConfigProperties) {
         OpenApiSettings.OpenApiInfo info = appConfigProperties.getOpenApi().getInfo();
