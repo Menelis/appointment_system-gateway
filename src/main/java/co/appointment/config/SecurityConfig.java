@@ -1,47 +1,37 @@
 package co.appointment.config;
 
-import co.appointment.service.CustomAccessDeniedHandler;
-import co.appointment.service.CustomAuthEntryPoint;
-import co.appointment.service.JwtReactiveAuthenticationManager;
-import co.appointment.service.JwtServerAuthenticationConverter;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
-import org.springframework.security.config.web.server.SecurityWebFiltersOrder;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
+import org.springframework.security.oauth2.jwt.NimbusReactiveJwtDecoder;
+import org.springframework.security.oauth2.jwt.ReactiveJwtDecoder;
 import org.springframework.security.web.server.SecurityWebFilterChain;
-import org.springframework.security.web.server.authentication.AuthenticationWebFilter;
-import org.springframework.security.web.server.context.NoOpServerSecurityContextRepository;
 
+@Profile("!test")
 @Configuration
 @EnableWebFluxSecurity
-@Slf4j
 public class SecurityConfig {
 
+    @Value("${spring.security.oauth2.resourceserver.jwt.jwk-set-uri}")
+    private String jwkSetUri;
+
     @Bean
-    public SecurityWebFilterChain securityWebFilterChain(final ServerHttpSecurity http,
-                                                         final AuthenticationWebFilter jwtAuthenticationWebFilter,
-                                                         final AppConfigProperties appConfigProperties,
-                                                         final ObjectMapper objectMapper) {
+    public SecurityWebFilterChain springSecurityFilterChain(final ServerHttpSecurity http,
+                                                            final AppConfigProperties appConfigProperties) throws Exception {
         return http
+                .authorizeExchange(auth -> auth.anyExchange().authenticated())
+                .oauth2ResourceServer((oauth2) -> oauth2.jwt(Customizer.withDefaults()))
                 .csrf(ServerHttpSecurity.CsrfSpec::disable)
-                .exceptionHandling(exception -> exception.accessDeniedHandler(new CustomAccessDeniedHandler(objectMapper))
-                        .authenticationEntryPoint(new CustomAuthEntryPoint(objectMapper)))
-                .authorizeExchange(exchanges -> exchanges
-                        .pathMatchers(appConfigProperties.getWhiteList()).permitAll()
-                        .anyExchange().authenticated()
-                )
-                .securityContextRepository(NoOpServerSecurityContextRepository.getInstance())
-                .addFilterAt(jwtAuthenticationWebFilter, SecurityWebFiltersOrder.AUTHENTICATION)
                 .build();
     }
+
     @Bean
-    public AuthenticationWebFilter jwtAuthenticationWebFilter(final JwtReactiveAuthenticationManager authManager,
-                                                              final JwtServerAuthenticationConverter converter) {
-        AuthenticationWebFilter filter = new AuthenticationWebFilter(authManager);
-        filter.setServerAuthenticationConverter(converter);
-        return filter;
+    public ReactiveJwtDecoder jwtDecoder() {
+        return NimbusReactiveJwtDecoder.withJwkSetUri(jwkSetUri)
+                .build();
     }
 }
