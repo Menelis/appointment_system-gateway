@@ -20,8 +20,7 @@ public class SecurityConfig {
     private String jwkSetUri;
 
     @Bean
-    public SecurityWebFilterChain springSecurityFilterChain(final ServerHttpSecurity http,
-                                                            final AppConfigProperties appConfigProperties) throws Exception {
+    public SecurityWebFilterChain springSecurityFilterChain(final ServerHttpSecurity http) {
         return http
                 .authorizeExchange(auth -> auth.anyExchange().authenticated())
                 .oauth2ResourceServer((oauth2) -> oauth2.jwt(Customizer.withDefaults()))
