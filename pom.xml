@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>co.appointment</groupId>
 	<artifactId>appointment-api-gateway</artifactId>
-	<version>1.0.2</version>
+	<version>1.0.3</version>
 	<name>appointment-api-gateway</name>
 	<description>Appointment System Gateway</description>
 	<url/>
@@ -29,7 +29,7 @@
 	<properties>
 		<java.version>25</java.version>
 		<spring-cloud.version>2025.0.0</spring-cloud.version>
-		<appointment-shared.version>1.0.1</appointment-shared.version>
+		<appointment-shared.version>1.0.2</appointment-shared.version>
 		<springdoc-openapi-starter-webflux-ui.version>2.8.13</springdoc-openapi-starter-webflux-ui.version>
 		<grpc.version>1.76.0</grpc.version>
 	</properties>

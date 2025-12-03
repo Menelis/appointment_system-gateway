@@ -6,7 +6,7 @@
 ### Existing public Docker Image
  - There is an already existing public image you can use without building the new one if you not making code changes:
    - Image - ```docker.io/menelismthembu12/appointment-api-gateway```
-   - Tag - ```1.0.2```
+   - Tag - ```1.0.3```
  - The service allows config to be externalized using config-server.
 ```yaml
 spring:
