@@ -1,22 +1,16 @@
 package co.appointment;
 
 import co.appointment.config.AppConfigProperties;
-import co.appointment.shared.service.EncryptionService;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.FilterType;
 
+@SuppressWarnings({"HideUtilityClassConstructor"})
 @SpringBootApplication
-@ComponentScan(
-		excludeFilters = { @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = EncryptionService.class) })
-@EnableConfigurationProperties({ AppConfigProperties.class })
+@EnableConfigurationProperties({AppConfigProperties.class})
 public class AppointmentGatewayApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(AppointmentGatewayApplication.class, args);
-	}
-
+    static void main(final String[] args) {
+        SpringApplication.run(AppointmentGatewayApplication.class, args);
+    }
 }
