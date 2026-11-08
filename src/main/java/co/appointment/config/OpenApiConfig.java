@@ -1,7 +1,5 @@
 package co.appointment.config;
 
-
-import co.appointment.shared.model.OpenApiSettings;
 import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
@@ -15,16 +13,18 @@ public class OpenApiConfig {
     @Bean
     public OpenAPI customOpenAPI(final AppConfigProperties appConfigProperties) {
         OpenApiSettings.OpenApiInfo info = appConfigProperties.getOpenApi().getInfo();
-        return new OpenAPI().addSecurityItem(new SecurityRequirement()
-                .addList("Bearer Authentication"))
+        return new OpenAPI()
+                .addSecurityItem(new SecurityRequirement().addList("Bearer Authentication"))
                 .components(new Components().addSecuritySchemes("Bearer Authentication", createAPIKeyScheme()))
                 .info(new Info()
                         .title(info.getTitle())
                         .description(info.getDescription())
                         .version(info.getVersion()));
     }
+
     private SecurityScheme createAPIKeyScheme() {
-        return new SecurityScheme().type(SecurityScheme.Type.HTTP)
+        return new SecurityScheme()
+                .type(SecurityScheme.Type.HTTP)
                 .bearerFormat("JWT")
                 .scheme("bearer");
     }
